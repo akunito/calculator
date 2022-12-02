@@ -84,3 +84,22 @@ body{
     border: 1px double gray;
     background-color:magenta;
   }
+
+  #calculator{
+    border: 1px solid blue;
+    width: 250px;
+    align-items: center;
+    padding: 1em;
+  }
+
+  .calc{
+    width: 20%;
+  }
+  .equal{
+    width: 40%;
+  }
+  
+  .display{
+    width: 85%;
+  }
+
