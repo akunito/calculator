@@ -4,7 +4,6 @@ const calc = (a, b, operator) => {
     return (Function("a", "b", `return a ${operator} b`)(a,b) )
 }
 
-
 const calcButtons = document.querySelectorAll('.calc');
 const calcNumbers = document.querySelectorAll('.number');
 const calcOperators = document.querySelectorAll('.operator');
@@ -14,94 +13,75 @@ const calcClear = document.querySelectorAll('.clear');
 const history = document.querySelector('#history');
 const display = document.querySelector('#display');
 
-let value1 = null;
-let operator = null;
-let value2 = null;
+let valueCurrent = null;
+let values = [];
+let counter = 0;
 let coma = false;
 
 calcNumbers.forEach((button) => {
     button.addEventListener('click', () => {
         if (coma === false || button.id != "."){
-            if (operator != null){          //if there is OPERATOR --> value2
-                if (value2 != null){
-                    value2 += button.id;
-                    display.value = value2
-                } else {
-                    value2 = button.id;
-                    display.value = value2
-                }
-                
-            } else {                      //if there is NOT OPERATOR --> value1
-                if (value1 != null){
-                    value1 += button.id;
-                    display.value = value1
-                } else {
-                    value1 = button.id;
-                    display.value = value1
-                }
+            if (valueCurrent != null){
+                valueCurrent += button.id;
+                display.value = valueCurrent
+            } else {
+                valueCurrent = button.id;
+                display.value = valueCurrent
             }
-    
             if (button.id === "." ) {
                 coma = true;
             }
             history.value += button.id;
-            console.log(value1);
-
         } else {
             console.log("double coma not possible")
         }
-
     });
 });
 
 calcOperators.forEach((button) => {
     button.addEventListener('click', () => {
-        history.value += button.id;
-        //operating
-        operator = button.id
-        display.value = operator
+        if (valueCurrent != null) {
+            history.value += ' ' + button.id + ' ';
+            //operating
+            display.value = button.id
+            values[counter] = valueCurrent;
+            values[counter+1] = button.id;
+            counter += 2;
+            //clearing
+            valueCurrent = null;
+        } else {
+            console.log(history.value);
+
+            let historyAux = history.value;
+            historyAux = historyAux.substring(0,history.length-3);
+            history.value = historyAux + ' ' + button.id + ' ';
+
+            console.log(history.value);
+            //operating
+            display.value = button.id
+            values[counter-2] = valueCurrent;
+            values[counter-1] = button.id;
+        }
         //clearing
         coma = false;
         //console
-        console.log(operator);
+        console.log(values);
+        console.log(counter);
     });
 });
 
 
-calcEqual.forEach((button) => {
-    button.addEventListener('click', () => {
-        history.value += button.id;
-        //operating
-        const result = calc(value1, value2, operator);
-        display.value = result;
-        history.value += result;
-        //clearing
-        value1 = result;
-        operator = null;
-        value2 = null;
-        history.value += " | " + result;
-        
-        //check if results has coma
-        if (result == Math.floor(result)){
-            coma = false;
-        } else {
-            coma = true;
-        }
-        
-        //console
-        console.log(result);
-    });
-});
 
 calcClear.forEach((button) => {
     button.addEventListener('click', () => {
         history.value = "";
         display.value = "";
-
         //clearing
-        value1 = null;
-        operator = null;
-        value2 = null;
+        valueCurrent = null;
+        values = [];
+        operatorCurrent = null;
+        operators = [];
+        counter = 0;
         coma = false;
         //console
         console.log(button.id);
