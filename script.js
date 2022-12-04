@@ -82,8 +82,8 @@ calcEqual.forEach((button) => {
         history.value += " | " + result;
         
         //check if results has coma
-        if (result == Math.floor(result)){
-            coma = false;
+        if (result == Math.floor(result)){ //floor remove decimals, rounding the number
+            coma = false; //if equal means that number has no decimals or coma
         } else {
             coma = true;
         }
